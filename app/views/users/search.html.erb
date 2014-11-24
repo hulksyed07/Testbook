@@ -1,0 +1,12 @@
+You are Searching for <%=@user.name%>
+<h3>Matches found..</h3>
+<ul>
+ <% @users.each do |user|%>
+   
+   <% if user.name.include? @user.name.capitalize%>
+     <li>
+     <%=user.name%>
+     </li>
+   <% end %>
+ <% end %>
+</ul>

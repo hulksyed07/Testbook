@@ -1,0 +1,165 @@
+
+<h3>Welcome <%=@user.name%></h3> 
+Your TestBook Id is <%=@user.id%>
+<br><br>
+________________________________________________________________________________________________
+<%=form_for :user,url:search_user_path do |f|%>
+ <p>
+    <%= f.label :name %><br>
+    <%= f.text_area :name %>
+  </p>
+ 
+  <p>
+    <%= f.submit "Search users" %>
+  </p>
+<% end %> 
+
+________________________________________________________________________________________________
+
+<h2>Friends:</h2>
+ <%x=0%>
+ <% @users.each do |user|%>
+   <% if user.name!=@user.name %>
+     <%b=0 %>
+     <% @user.friendships.each do |friendship| %>
+       <% if friendship.friend_id==user.id %>
+         <% b=1 %>
+       <% end %>
+     <% end %>
+     <% user.friendships.each do |friendship| %>
+       <% if friendship.friend_id==@user.id %>
+         <% b=b+1 %>
+       <% end %>
+     <% end %>
+     <% if b==2 %>
+       ................................................................................................<br>
+       <%= user.name%><br>
+       <%x=x+1%>
+     <% end %>
+   <% end %> 
+ <% end %>
+
+ <% if x>0 %>
+   _______________________________________________________________________________________________<br>
+   <b>Total Friends = <%=x%><br></b>
+ <% else %>
+   No Friends Yet...<br>
+ <% end %>
+ 
+________________________________________________________________________________________________
+
+
+
+
+
+
+
+<h2>Friend Request sent</h2>
+ <% @user.friendships.each do |friendship| %>
+  <p>
+    <strong>Friend_id:</strong>
+    <%= friendship.friend_id%>
+  </p>
+  <p>
+    <%= link_to 'Remove Friendship',[friendship.user,friendship],method: :delete,data: {confirm:'Are you sure'}%>
+  </p>
+ <% end %>
+
+
+________________________________________________________________________________________________
+
+
+<h2>New Friendship Invites</h2>
+ <% @users.each do |user|%>
+   <% if user.name!=@user.name %>
+     <%c=0 %>
+
+     <% @user.friendships.each do |friendship| %>
+       <% if friendship.friend_id==user.id %>
+         <% c=1 %>
+       <% end %>
+     <% end %>
+
+     <% user.friendships.each do |friendship| %>
+       <% if friendship.friend_id==@user.id %>
+         <% c=c+1 %>
+       <% end %>
+     <% end %>
+
+     <% if c!=2 %>
+       <% user.friendships.each do |friendship| %>
+         <%if friendship.friend_id==@user.id%>
+           ................................................................................................<br>
+           <p>
+           <strong>Friend name:</strong>
+           <%=user.name%>
+           </p>
+           <p>
+           <%=form_for([@user,@user.friendships.build]) do |f|%>
+             <p>
+             User Id
+             <%= f.text_field :friend_id, :value=> friendship.user_id%>
+             </p>
+             <p>
+             <%= f.submit "Accept Friendship" %>
+             </p>
+           <% end %> 
+           <%= link_to 'Remove Friendship',[friendship.user,friendship],method: :delete,data: {confirm:'Are you sure'}%>
+           </p>
+         <% end %>
+       <% end %>
+     <% end %>
+   <% end %>
+ <% end %>
+
+
+
+________________________________________________________________________________________________
+
+
+<h2>These are all the persons registered on Testbook other than you</h2>
+ <% @users.each do |user|%>
+   <% if user.name!=@user.name %>
+................................................................................................<br>
+     <b><%= user.name%><br></b>
+     <%a=0 %>
+     <% @user.friendships.each do |friendship| %>
+       <% if friendship.friend_id==user.id %>
+         <% a=1 %>
+       <% end %>
+     <% end %>
+     <% user.friendships.each do |friendship| %>
+       <% if friendship.friend_id==@user.id %>
+         <% a=1 %>
+       <% end %>
+     <% end %>
+     <% if a==0 %>
+        <%=form_for([@user,@user.friendships.build]) do |f|%>
+          <p>
+          User Id
+          <%= f.text_field :friend_id, :value=> user.id%>
+          </p>
+          <p>
+          <%= f.submit "Send friend Request" %>
+          </p>
+        <% end %> 
+     <% end %>
+
+   <% end %>
+ <% end %>
+
+
+
+________________________________________________________________________________________________
+
+<h2>These are the names of persons registered on Testbook other Than you</h2>
+
+
+ <% @users.each do |user|%>
+   <% if user.name!=@user.name %>
+     
+          <%= user.name%><br>
+          
+      
+   <% end %>
+ <% end %>
